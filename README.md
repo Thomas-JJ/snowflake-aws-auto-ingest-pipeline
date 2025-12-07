@@ -291,16 +291,6 @@ Let's walk through a real example:
 8. **Scheduled Merge** → Task executes the stored procedure: `CALL merge_orders_proc()`
 9. **Final Result** → Clean, deduplicated data available in `ANALYTICS.ORDERS`
 
-## 🔮 Future Enhancements
-
-- [ ] **AWS Step Functions** - Extended orchestration for complex workflows
-- [ ] **SNS Notifications** - Real-time alerts for pipeline failures
-- [ ] **Resource Monitors** - Snowflake warehouse optimization and cost tracking
-- [ ] **Data Quality Checks** - Great Expectations or dbt integration
-- [ ] **Dashboard Integration** - Power BI or Tableau connection examples
-- [ ] **CI/CD Pipeline** - GitHub Actions for automated testing and deployment
-- [ ] **Data Lineage** - Integration with data catalog tools
-- [ ] **Monitoring & Observability** - CloudWatch dashboards and custom metrics
 
 ## 🤝 Contributing
 
