@@ -83,20 +83,49 @@ This project implements a fully automated, event-driven data pipeline that moves
 ## 📁 Repository Structure
 
 ```
-.
-├── main.tf                      # Main Terraform configuration
-├── variables.tf                 # Variable definitions
-├── terraform.tfvars.example     # Example variable values
-├── glue_jobs/
-│   └── scripts/                 # Glue ETL scripts (Python/PySpark)
-├── snowflake/
-│   ├── stages/                  # External stage definitions
-│   ├── pipes/                   # Snowpipe configurations
-│   ├── streams/                 # Stream definitions
-│   ├── tasks/                   # Task schedules
-│   └── procedures/              # Stored procedures for MERGE logic
-└── README.md
+aws-glue-processfiles/
+├── .gitignore
+├── LICENSE
+├── README.md
+├── environments/
+│   ├── dev/
+│   │   ├── .terraform/
+│   │   ├── .terraform.lock.hcl
+│   │   ├── main.tf                    # Dev environment configuration
+│   │   ├── providers.tf               # Provider configurations
+│   │   ├── variables.tf               # Variable definitions
+│   │   ├── terraform.tfvars           # Dev environment values
+│   │   └── terraform.tfvars.example   # Example configuration
+│   └── prod/
+│       └── ...                        # Production environment (same structure as dev)
+└── modules/
+    ├── glue-job/
+    │   ├── scripts-py/                # Python/PySpark transformation scripts
+    │   ├── main.tf                    # Glue job resources
+    │   ├── variables.tf               # Module variables
+    │   ├── outputs.tf                 # Module outputs
+    │   └── providers.tf
+    └── snowpipe/
+        ├── procs/                     # Stored procedures for MERGE logic
+        ├── main.tf                    # Snowflake resources (stages, pipes, streams, tasks)
+        ├── variables.tf               # Module variables
+        ├── outputs.tf                 # Module outputs
+        └── providers.tf
 ```
+
+### Structure Explanation
+
+- **`environments/`** - Environment-specific configurations (dev, prod)
+  - Each environment has its own Terraform state and variable values
+  - Promotes environment isolation and safe deployments
+
+- **`modules/glue-job/`** - Reusable Glue ETL module
+  - `scripts-py/` contains transformation logic
+  - Handles EventBridge triggers, IAM roles, and job configurations
+
+- **`modules/snowpipe/`** - Reusable Snowflake ingestion module
+  - `procs/` contains stored procedures for data merging
+  - Manages stages, pipes, streams, tasks, and file formats
 
 ## ⚙️ Configuration
 
@@ -287,4 +316,4 @@ For questions or support, please open an issue in the GitHub repository.
 
 ---
 
-**Built with ❤️ using Terraform, AWS, and Snowflake*
+**Built with ❤️ using Terraform, AWS, and Snowflake**
