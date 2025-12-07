@@ -1,0 +1,58 @@
+environment  = "dev"
+aws_region   = "us-east-2"
+
+snowflake_account_name = "account_name"
+snowflake_organization_name = "org_name"
+snowflake_role = "role"
+snowflake_user = "user"
+snowflake_warehouse = "warehouse"
+
+gluejobs = {
+
+    daily_sales_process = {
+        source_bucket = "data"
+        source_prefix = "sales/raw/"
+
+        target_bucket = "data"
+        target_prefix = "sales/staged/"
+
+        name = "raw-to-stage-transform-checkdata"
+
+        script = "Process-Checks-Raw-to-Stage.py"
+        event_trigger_enabled = true
+        #cron_schedule = "0 5 * * 1 UTC"
+    }
+}
+
+database_name = "ANALYTICS"
+warehouse = "SALESETL_WH"
+snowflake_admin_role = "role"
+
+snowflake_external_id        = "external_id"
+snowflake_aws_principal_arn  = "principal_arn"
+
+pipelines = {
+    process_daily_sales = {
+        schema_name    = "SALES"
+        staging_schema = "SALES"
+        source_bucket  = "data"
+        source_prefix  = "sales/staged"
+        
+        file_format = { type = "CSV", delimiter = ",", skip_header = 1, field_optionally_enclosed_by = "\"", trim_space = true }
+
+        target_table   = "DAILY_SALES"
+        staging_table  = "STG_DAILY_SALES"
+        merge_keys     = ["DATE"]
+        cron_schedule  = "0 5 * * 1 UTC"
+        on_error       = "CONTINUE"
+        pattern        = "/.*"
+
+        procedure_name = "SP_MERGE_DAILY_SALES"
+        procedure_lang = "SQL"
+        procedure_file = "../../modules/snowpipe/procs/SP_MERGE_DAILY_SALES.sql"
+        
+        event_trigger_enabled = true
+    }
+}
+
+
